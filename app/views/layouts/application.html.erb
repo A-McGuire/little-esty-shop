@@ -23,14 +23,16 @@
     <% end %>
 
     <%= yield %>
+    
+    <% if false %>
+      <h4>Git Hub Repository:
+        <% service = GitHubService.new %>
+        <%= service.repo_name %>
+      </h4>
 
-    <h4>Git Hub Repository:
-      <% service = GitHubService.new %>
-      <%= service.repo_name %>
-    </h4>
-
-    <h4>Contributors:
-      <%= service.repo_contributors.join(", ") %>
-    </h4>
+      <h4>Contributors:
+        <%= service.repo_contributors.join(", ") %>
+      </h4>
+    <% end %>
   </body>
 </html>
