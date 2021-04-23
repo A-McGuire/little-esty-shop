@@ -6,3 +6,7 @@
     Discount: <%= bulk_discount.discount.to_f* 100%>%<br><br>
   <% end %>
 </section>
+
+<section>
+  <%= link_to "Create New Bulk Discount", "/merchants/#{@merchant.id}/bulk_discounts" %>
+</section>
