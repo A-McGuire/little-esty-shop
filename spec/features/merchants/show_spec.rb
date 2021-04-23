@@ -414,9 +414,16 @@ RSpec.describe 'the merchant show page', type: :feature do
       expect(page).to have_content(invoice_2a.created_at.strftime("%A, %B %d, %Y"))
       expect(page).to have_content(invoice_1b.created_at.strftime("%A, %B %d, %Y"))
       expect(page).to have_content(invoice_2b.created_at.strftime("%A, %B %d, %Y"))
-
-
     end
+  end
 
+  it 'has a link to view all bulk discounts for merchant' do
+    merchant = Merchant.create!(name: 'Big Merch')
+
+    visit "/merchants/#{merchant.id}/dashboard"
+
+    expect(page).to have_link("Bulk Discounts")
+    click_link "Bulk Discounts"
+    expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts")
   end
 end
