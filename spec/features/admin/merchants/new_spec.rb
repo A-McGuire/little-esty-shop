@@ -9,6 +9,7 @@ RSpec.describe 'admin new merchant page', type: :feature do
     expect(find('form')).to have_content('Status')
     expect(find('form')).to have_button('Create Merchant')
   end
+  
   describe 'happy path' do
     it 'creates a new merchant with a default status of disabled' do
 
