@@ -51,5 +51,18 @@ RSpec.describe 'new bulk discount page', type: :feature do
       expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts/new")
       expect(page).to have_content("Threshold can't be blank")
     end
+
+    it 'does not allow creation of bulk discount with invalid discount value' do
+      merchant = Merchant.create!(name: 'Big Merch')
+    
+      visit "/merchants/#{merchant.id}/bulk_discounts/new"
+      
+      fill_in "Threshold", with: "50"
+      fill_in "Discount", with: "5"
+      click_button "Create Bulk discount"
+
+      expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts/new")
+      expect(page).to have_content("Error: Discount is not included in the list")
+    end
   end
 end
