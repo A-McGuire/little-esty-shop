@@ -14,7 +14,7 @@ class BulkDiscountsController < ApplicationController
       redirect_to "/merchants/#{merchant.id}/bulk_discounts", notice: "Bulk Discount Successfully Created"
     else
       redirect_to "/merchants/#{merchant.id}/bulk_discounts/new"
-      flash[:alert] = "Error: #{error_message(merchant.errors)}"
+      flash[:alert] = "Error: #{error_message(bulk_discount.errors)}"
     end
   end
 

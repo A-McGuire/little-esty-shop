@@ -24,11 +24,32 @@ RSpec.describe 'new bulk discount page', type: :feature do
       expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts")
       expect(page).to have_content(50)
       expect(page).to have_content("50.0%")
+      expect(page).to have_content("Bulk Discount Successfully Created")
     end
   end
 
   describe 'sad path' do
-    it 'does not allow creation of a bulk discount w/o a threshold'
-    it 'does not allow creation of a bulk discount w/o a discount'
+    it 'does not allow creation of a bulk discount w/o a threshold' do
+      merchant = Merchant.create!(name: 'Big Merch')
+    
+      visit "/merchants/#{merchant.id}/bulk_discounts/new"
+      
+      fill_in "Threshold", with: "50"
+      click_button "Create Bulk discount"
+
+      expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts/new")
+      expect(page).to have_content("Discount can't be blank")
+    end
+    it 'does not allow creation of a bulk discount w/o a discount' do
+      merchant = Merchant.create!(name: 'Big Merch')
+    
+      visit "/merchants/#{merchant.id}/bulk_discounts/new"
+      
+      fill_in "Discount", with: "0.50"
+      click_button "Create Bulk discount"
+
+      expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts/new")
+      expect(page).to have_content("Threshold can't be blank")
+    end
   end
 end
