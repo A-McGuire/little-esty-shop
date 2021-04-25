@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   
   resources :merchants, only: [:index] do
     resources :items, shallow: true
-    resources :bulk_discounts, only: [:index, :new, :create, :destroy, :show]
+    resources :bulk_discounts, only: [:index, :new, :create, :destroy, :show, :edit]
   end
  
   get "/merchants/:id/dashboard", to: 'merchants#show'
