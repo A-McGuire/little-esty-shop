@@ -1,6 +1,6 @@
 class BulkDiscountsController < ApplicationController
   before_action(:set_merchant, only: [:index, :show, :create, :destroy])
-  before_action(:set_bulk_discount, only: [:show, :edit, :destroy])
+  before_action(:set_bulk_discount, only: [:show, :edit, :destroy, :update])
 
   def set_bulk_discount
     @bulk_discount = BulkDiscount.find(params[:id])
@@ -36,6 +36,12 @@ class BulkDiscountsController < ApplicationController
     @bulk_discount
   end
 
+  def update
+    binding.pry
+    @bulk_discount.update(bulk_discount_params)
+    redirect_to "/merchants/#{@merchant.id}/bulk_discounts/#{@bulk_discount.id}", notice: "Bulk Discount Updated"
+  end
+
   def destroy
     @merchant.bulk_discounts.delete(@bulk_discount)
     redirect_to "/merchants/#{@merchant.id}/bulk_discounts"
@@ -43,6 +49,6 @@ class BulkDiscountsController < ApplicationController
 
   private
   def bulk_discount_params
-    params.require(:bulk_discount).permit(:threshold, :discount, :merchant_id)
+    params.require(:bulk_discount).permit(:threshold, :discount)
   end
 end

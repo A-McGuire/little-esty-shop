@@ -1,0 +1,11 @@
+<h2>Edit Bulk Discount</h2>
+
+<%= form_with model: [:merchant, @bulk_discount], local: true do |f| %>
+  <%= f.label "Threshold" %>
+  <%= f.text_field :threshold %>
+
+  <%= f.label "Discount" %>
+  <%= f.text_field :discount %>
+
+  <%= f.submit %>
+<% end %>
