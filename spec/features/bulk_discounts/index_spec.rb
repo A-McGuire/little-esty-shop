@@ -11,17 +11,16 @@ RSpec.describe 'bulk discounts show page' do
     
     bulk_discount4 = merchant2.bulk_discounts.create!(threshold: 6, discount: 0.1)
     bulk_discount5 = merchant2.bulk_discounts.create!(threshold: 11, discount: 0.2)
-    bulk_discount6 = merchant2.bulk_discounts.create!(threshold: 16, discount: 0.3)
+    bulk_discount6 = merchant2.bulk_discounts.create!(threshold: 17, discount: 0.3)
     
     visit "/merchants/#{merchant1.id}/bulk_discounts"
     
     expect(page).to have_content(bulk_discount1.threshold)
     expect(page).to have_content(bulk_discount2.threshold)
     expect(page).to have_content(bulk_discount3.threshold)
-    save_and_open_page
-    expect(page).to_not have_content(bulk_discount4.threshold)
-    expect(page).to_not have_content(bulk_discount5.threshold)
-    expect(page).to_not have_content(bulk_discount6.threshold)
+    expect(page).to_not have_content("Threshold: #{bulk_discount4.threshold}")
+    expect(page).to_not have_content("Threshold: #{bulk_discount5.threshold}")
+    expect(page).to_not have_content("Threshold: #{bulk_discount6.threshold}")
   end
   
   it 'has a link to create a new bulk discount' do
