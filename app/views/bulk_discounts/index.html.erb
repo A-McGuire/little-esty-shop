@@ -2,8 +2,11 @@
 
 <section>
   <% @bulk_discounts.each do |bulk_discount| %>
-    Threshold: <%= bulk_discount.threshold %>
-    Discount: <%= bulk_discount.discount.to_f* 100%>%<br><br>
+    <section id="bulk_discount-<%= bulk_discount.id %>">
+      Threshold: <%= bulk_discount.threshold %>
+      Discount: <%= bulk_discount.discount.to_f* 100%>%<br>
+      <%= link_to "Delete", "/merchants/#{@merchant.id}/bulk_discounts/#{bulk_discount.id}", method: :delete%>
+    </section>
   <% end %>
 </section>
 

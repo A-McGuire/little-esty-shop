@@ -33,4 +33,35 @@ RSpec.describe 'bulk discounts show page' do
     click_link "Create New Bulk Discount"
     expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts/new")
   end
+
+  it 'has a button to delete a bulk discount' do
+    merchant1 = Merchant.create!(name: 'Big Merch')
+    
+    bulk_discount1 = merchant1.bulk_discounts.create!(threshold: 5, discount: 0.1)
+    bulk_discount2 = merchant1.bulk_discounts.create!(threshold: 10, discount: 0.2)
+    bulk_discount3 = merchant1.bulk_discounts.create!(threshold: 15, discount: 0.3)
+
+    visit "/merchants/#{merchant1.id}/bulk_discounts"
+
+    within("#bulk_discount-#{bulk_discount1.id}") do
+      expect(page).to have_link("Delete")
+      click_link "Delete"
+      expect(current_path).to eq("/merchants/#{merchant1.id}/bulk_discounts")
+    end
+    expect(page).to_not have_content("#{bulk_discount1.discount}")
+
+    within("#bulk_discount-#{bulk_discount2.id}") do
+      expect(page).to have_link("Delete")
+      click_link "Delete"
+      expect(current_path).to eq("/merchants/#{merchant1.id}/bulk_discounts")
+    end
+    expect(page).to_not have_content("#{bulk_discount2.discount}")
+
+    within("#bulk_discount-#{bulk_discount3.id}") do
+      expect(page).to have_link("Delete")
+      click_link "Delete"
+      expect(current_path).to eq("/merchants/#{merchant1.id}/bulk_discounts")
+    end
+    expect(page).to_not have_content("#{bulk_discount3.discount}")
+  end
 end
