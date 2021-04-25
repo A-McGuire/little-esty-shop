@@ -37,9 +37,13 @@ class BulkDiscountsController < ApplicationController
   end
 
   def update
-    binding.pry
-    @bulk_discount.update(bulk_discount_params)
-    redirect_to "/merchants/#{@merchant.id}/bulk_discounts/#{@bulk_discount.id}", notice: "Bulk Discount Updated"
+    if @bulk_discount.update(bulk_discount_params)
+      redirect_to "/merchants/#{@bulk_discount.merchant_id}/bulk_discounts/#{@bulk_discount.id}", 
+      notice: "Bulk Discount Updated."
+    else
+      redirect_to "/merchants/#{@bulk_discount.merchant_id}/bulk_discounts/#{@bulk_discount.id}/edit"
+      flash[:alert] = "Error: #{error_message(@bulk_discount.errors)}"
+    end
   end
 
   def destroy
@@ -49,6 +53,10 @@ class BulkDiscountsController < ApplicationController
 
   private
   def bulk_discount_params
-    params.require(:bulk_discount).permit(:threshold, :discount)
+    if params[:action] == "update"
+      params.permit(:threshold, :discount)
+    else
+      params.require(:bulk_discount).permit(:threshold, :discount)
+    end
   end
 end
