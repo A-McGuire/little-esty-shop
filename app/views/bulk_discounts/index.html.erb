@@ -9,8 +9,18 @@
       <%= link_to "Delete", "/merchants/#{@merchant.id}/bulk_discounts/#{bulk_discount.id}", method: :delete%>
     </section>
   <% end %>
-</section>
+</section><br>
 
 <section>
   <%= link_to "Create New Bulk Discount", "/merchants/#{@merchant.id}/bulk_discounts/new" %>
+</section><br>
+
+<section>
+Upcoming Holidays:<br><br>
+  <% require "./app/services/nager_service" %>
+  <% service = NagerService.new %>
+  <% service.next_three_holidays.each do |holiday| %>
+    <%= holiday %><br>
+  <% end %>
 </section>
+
