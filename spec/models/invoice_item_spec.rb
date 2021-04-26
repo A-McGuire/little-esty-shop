@@ -14,6 +14,7 @@ RSpec.describe InvoiceItem do
         merchant.bulk_discounts.create!(threshold: 20, discount: 0.2)
         merchant.bulk_discounts.create!(threshold: 30, discount: 0.3)
         merchant.bulk_discounts.create!(threshold: 40, discount: 0.4)
+        merchant.bulk_discounts.create!(threshold: 15, discount: 0.1)
         customer = Customer.create!(first_name: "Abe", last_name: "Oldman")
 
         item1 = merchant.items.create!(name: "thing", description: "thingy", unit_price: 10)
