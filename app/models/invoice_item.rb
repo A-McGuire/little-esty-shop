@@ -10,10 +10,16 @@ class InvoiceItem < ApplicationRecord
   has_many :bulk_discounts, through: :merchant
 
   def best_discount
-    binding.pry
     bulk_discounts.order(:discount)
-                  .where("threshold <= ?", self.quantity)
-                  .last
-                  .discount
+    .where("threshold <= ?", self.quantity)
+    .last
+  end
+  
+  def revenue
+    if best_discount.present?
+      quantity * unit_price * (1 - best_discount.discount)
+    else
+      quantity * unit_price
+    end
   end
 end
