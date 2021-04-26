@@ -1,14 +1,14 @@
 <h2>Invoice ID: <%= @invoice.id %></h2></br>
 <div id="test">Status: <%= @invoice.status %> </div><br>
 
-<seciton>
+<section>
   <%= form_with url: "/merchants/#{@merchant.id}/invoices/#{@invoice.id}", method: :patch, local: true do |f| %>
     <%= f.label :status %>
     <%= f.select :status, ['in progress', 'cancelled', 'completed']%>
 
     <%= f.submit "Update Invoice Status" %>
   <% end %>
-</seciton><br>
+</section><br>
 
 <section>
   Created at: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %> <br>
@@ -25,6 +25,6 @@
   <% end %>
 </section><br>
 
-<seciton>
-  Total Revenue: $<%= @total_revenue[@invoice.id] %></br>
-</seciton>
+<section>
+  Total Revenue: $<%= @total_revenue %></br>
+</section>

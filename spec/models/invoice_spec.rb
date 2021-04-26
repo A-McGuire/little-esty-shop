@@ -37,6 +37,26 @@ RSpec.describe Invoice do
   end
 
   describe "instance methods" do
+    describe 'apply_bulk_discount' do
+      it 'applies a bulk discount to eligible invoice items' do
+        merchant = Merchant.create!(name: "mel")
+        merchant.bulk_discounts.create!(threshold: 10, discount: 0.1)
+        merchant.bulk_discounts.create!(threshold: 20, discount: 0.2)
+        merchant.bulk_discounts.create!(threshold: 30, discount: 0.3)
+        customer = Customer.create!(first_name: "Abe", last_name: "Oldman")
+
+        item1 = merchant.items.create!(name: "thing", description: "thingy", unit_price: 10)
+        item2 = merchant.items.create!(name: "thing2", description: "2thingy", unit_price: 15)
+        invoice1 = customer.invoices.create!(status: 0)
+
+        invoice_item1 = InvoiceItem.create!(item: item1, invoice: invoice1, quantity: 20, unit_price: 5, status: 2) #100 #80
+        invoice_item2 = InvoiceItem.create!(item: item1, invoice: invoice1, quantity: 2, unit_price: 5, status: 0) #10
+        invoice_item3 = InvoiceItem.create!(item: item1, invoice: invoice1, quantity: 40, unit_price: 5, status: 0) #200 # 140
+
+        expect(invoice1.apply_bulk_discounts).to eq(230)
+      end
+    end
+
     describe "#invoice_items" do
       it " returns info on all items in an invoice" do
         customer = Customer.create!(first_name: "Very", last_name: "Rich")

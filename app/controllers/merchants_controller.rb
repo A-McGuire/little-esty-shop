@@ -23,7 +23,8 @@ class MerchantsController < ApplicationController
     @invoice = Invoice.find(params[:invoice_id])
     @customer = Customer.find(@invoice.customer_id)
     @items = @invoice.invoice_items_info(@merchant.id)
-    @total_revenue = @invoice.expected_revenue(@merchant.id)
+    # @total_revenue = @invoice.expected_revenue(@merchant.id)
+    @total_revenue = @invoice.apply_bulk_discounts
   end
 
   def update

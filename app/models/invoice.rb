@@ -7,6 +7,8 @@ class Invoice < ApplicationRecord
   has_many :transactions, dependent: :destroy
   has_many :invoice_items
   has_many :items, through: :invoice_items
+  has_many :merchants, through: :items
+  has_many :bulk_discounts, through: :merchants
 
   def self.find_all_invoices_not_shipped
     joins(:invoice_items)
@@ -16,16 +18,18 @@ class Invoice < ApplicationRecord
   end
 
   def invoice_items_info(merchant_id)
-    #  self.items.select("items.name, invoice_items.*")
-    # why does above version .status give a number, andthe one bleow not?
-    InvoiceItem.joins(item: :merchant).where(invoice_id: self.id).where('merchants.id = ?', merchant_id)
-      .select("invoice_items.*, items.name")
-
+    InvoiceItem.joins(item: :merchant)
+               .where(invoice_id: self.id)
+               .where('merchants.id = ?', merchant_id)
+               .select("invoice_items.*, items.name")
   end
 
   def expected_revenue(merchant_id)
-    InvoiceItem.joins(item: :merchant).where(invoice_id: self.id).group(:invoice_id).where('merchants.id = ?', merchant_id)
-        .sum("invoice_items.quantity * invoice_items.unit_price")
+    InvoiceItem.joins(item: :merchant)
+               .where(invoice_id: self.id)
+               .group(:invoice_id)
+               .where('merchants.id = ?', merchant_id)
+               .sum("invoice_items.quantity * invoice_items.unit_price")
   end
 
   def item_sell_info
@@ -34,5 +38,11 @@ class Invoice < ApplicationRecord
 
   def revenue
     invoice_items.sum("invoice_items.unit_price * invoice_items.quantity")
+  end
+
+  def apply_bulk_discounts
+    invoice_items.sum do |invoice_item|
+      invoice_item.revenue
+    end
   end
 end
