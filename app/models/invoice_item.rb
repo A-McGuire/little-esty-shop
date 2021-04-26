@@ -6,4 +6,12 @@ class InvoiceItem < ApplicationRecord
 
   belongs_to :item
   belongs_to :invoice
+  has_one :merchant, through: :item
+  has_many :bulk_discounts, through: :merchant
+
+  def best_discount
+    # binding.pry
+    # bulk_discounts.order(threshold: :desc).where("threshold <= ?", self.quantity)
+    bulk_discounts.order(threshold: :desc).where("threshold <= ?", self.quantity).first.discount
+  end
 end
