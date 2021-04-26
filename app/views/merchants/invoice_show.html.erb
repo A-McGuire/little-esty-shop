@@ -17,6 +17,20 @@
 </section><br>
 
 <section>
+  <% @invoice.invoice_items.each do |invoice_item| %>
+    <section id="invoice_item-<%= invoice_item.id %>">
+      Invoice Item ID: <%= invoice_item.id %><br>
+      <% if invoice_item.best_discount.present? %>
+        <%= link_to "Discount", "/merchants/#{invoice_item.merchant.id}/bulk_discounts/#{invoice_item.best_discount.id}" %>: 
+        <%= number_to_percentage(invoice_item.best_discount.discount * 100) %><br><br>
+      <% else %>
+        No Discount Applied<br><br>
+      <% end %>
+    </section>
+  <% end %>
+</section><br>
+
+<section>
   <% @items.each do |item| %>
     Item: <%= item.name %><br>
     Status: <%= item.status %><br>

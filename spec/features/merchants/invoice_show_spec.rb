@@ -264,4 +264,39 @@ RSpec.describe 'the merchant invoice show page: ', type: :feature do
       end
     end
   end
+
+  it 'has a link to each bulk discount that was applied' do
+    merchant = Merchant.create!(name: "mel")
+    merchant.bulk_discounts.create!(threshold: 10, discount: 0.1)
+    merchant.bulk_discounts.create!(threshold: 20, discount: 0.2)
+    merchant.bulk_discounts.create!(threshold: 30, discount: 0.3)
+    customer = Customer.create!(first_name: "Abe", last_name: "Oldman")
+
+    item1 = merchant.items.create!(name: "thing", description: "thingy", unit_price: 10)
+    item2 = merchant.items.create!(name: "thing2", description: "thingy2", unit_price: 10)
+    invoice1 = customer.invoices.create!(status: 0)
+
+    invoice_item1 = InvoiceItem.create!(item: item1, invoice: invoice1, quantity: 10, unit_price: 5, status: 0)
+    invoice_item2 = InvoiceItem.create!(item: item2, invoice: invoice1, quantity: 20, unit_price: 5, status: 0)
+    invoice_item3 = InvoiceItem.create!(item: item1, invoice: invoice1, quantity: 30, unit_price: 5, status: 0)
+    invoice_item4 = InvoiceItem.create!(item: item1, invoice: invoice1, quantity: 1, unit_price: 5, status: 0)
+
+    visit "/merchants/#{merchant.id}/invoices/#{invoice1.id}"
+
+    within("#invoice_item-#{invoice_item1.id}") do
+      expect(page).to have_link("Discount")
+    end
+
+    within("#invoice_item-#{invoice_item2.id}") do
+      expect(page).to have_link("Discount")
+    end
+
+    within("#invoice_item-#{invoice_item3.id}") do
+      expect(page).to have_link("Discount")
+    end
+
+    within("#invoice_item-#{invoice_item4.id}") do
+      expect(page).to_not have_link("Discount")
+    end
+  end
 end
