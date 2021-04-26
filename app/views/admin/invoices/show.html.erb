@@ -18,7 +18,8 @@
 </section>
 
 <section id="invoice_revenue">
-  Total Revenue: $<%= @invoice.revenue %>
+  Total Revenue: $<%= @invoice.revenue %><br>
+  Total Revenue after discounts: $<%= @invoice.apply_bulk_discounts %>
 </section>
 
 <section>
