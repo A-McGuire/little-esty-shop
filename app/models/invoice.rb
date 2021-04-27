@@ -45,4 +45,11 @@ class Invoice < ApplicationRecord
       invoice_item.revenue
     end
   end
+
+  #   invoice_items.joins(:bulk_discounts)
+  #                .where("invoice_items.quantity >= bulk_discounts.threshold")
+  #                .select("invoice_items.*, max(invoice_items.quantity * invoice_items.unit_price * (1 - bulk_discounts.discount)) as total_revenue")
+  #                .group("invoice_items.id")
+  #                .order(total_revenue: :desc)
+  # end
 end
